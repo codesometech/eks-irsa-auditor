@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: irsa-auditor
+spec:
+  template:
+    spec:
+      containers:
+      - name: irsa-auditor
+        image: {{.Values.image.repository}}:{{.Values.image.tag}}
+        command: ["java",  "-jar", "/app.jar"]
+        args: ["{{.Values.bucketName}}"]
+      restartPolicy: Never
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+  backoffLimit: 2

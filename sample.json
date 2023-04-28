@@ -1,0 +1,130 @@
+[{
+	"serviceAccount": "nginx-deployment-sa",
+	"role": "eksctl-eks-cluster-1-addon-iamserviceaccount-Role1-1TUPA9BG5KNH1",
+	"namespace": "default",
+	"policies": [{
+		"name": "DBSecret_eksworkshop_secrets_policy_5873",
+		"arn": "arn:aws:iam::963505482519:policy/DBSecret_eksworkshop_secrets_policy_5873",
+		"statements": [{
+			"actions": ["secretsmanager:GetSecretValue", "secretsmanager:DescribeSecret", "ssm:GetParameters"],
+			"resources": ["arn:aws:secretsmanager:us-east-2:963505482519:secret:ecs/demo/passocde-MoBgPO", "arn:aws:ssm:us-east-2:963505482519:parameter/demo-ecs-param"],
+			"effect": "Allow"
+		}]
+	}]
+}, {
+	"serviceAccount": "kubernetes-events-exporter",
+	"role": "eksctl-eks-cluster-1-addon-iamserviceaccount-Role1-8WORM5AE6UD3",
+	"namespace": "events",
+	"policies": [{
+		"name": "AllowEKSToPutEvents",
+		"arn": "arn:aws:iam::963505482519:policy/AllowEKSToPutEvents",
+		"statements": [{
+			"actions": ["events:PutEvents"],
+			"resources": ["arn:aws:events:us-east-1:963505482519:event-bus/k8seventbus"],
+			"effect": "Allow"
+		}, {
+			"actions": ["events:PutEvents"],
+			"resources": ["arn:aws:events:us-east-1:849066124334:event-bus/k8s-events-hub"],
+			"effect": "Allow"
+		}]
+	}]
+}, {
+	"serviceAccount": "karpenter",
+	"role": "eks-cluster-1-karpenter",
+	"namespace": "karpenter",
+	"policies": [{
+		"name": "KarpenterControllerPolicy-eks-cluster-1",
+		"arn": "arn:aws:iam::963505482519:policy/KarpenterControllerPolicy-eks-cluster-1",
+		"statements": [{
+			"actions": ["ec2:CreateLaunchTemplate", "ec2:CreateFleet", "ec2:RunInstances", "ec2:CreateTags", "iam:PassRole", "ec2:TerminateInstances", "ec2:DeleteLaunchTemplate", "ec2:DescribeLaunchTemplates", "ec2:DescribeInstances", "ec2:DescribeSecurityGroups", "ec2:DescribeSubnets", "ec2:DescribeInstanceTypes", "ec2:DescribeInstanceTypeOfferings", "ec2:DescribeAvailabilityZones", "ssm:GetParameter"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}]
+	}]
+}, {
+	"serviceAccount": "aws-load-balancer-controller",
+	"role": "eksctl-eks-cluster-1-addon-iamserviceaccount-Role1-1ISRIERAQSUJV",
+	"namespace": "kube-system",
+	"policies": [{
+		"name": "AWSLoadBalancerControllerIAMPolicy",
+		"arn": "arn:aws:iam::963505482519:policy/AWSLoadBalancerControllerIAMPolicy",
+		"statements": [{
+			"actions": ["iam:CreateServiceLinkedRole"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["ec2:DescribeAccountAttributes", "ec2:DescribeAddresses", "ec2:DescribeAvailabilityZones", "ec2:DescribeInternetGateways", "ec2:DescribeVpcs", "ec2:DescribeVpcPeeringConnections", "ec2:DescribeSubnets", "ec2:DescribeSecurityGroups", "ec2:DescribeInstances", "ec2:DescribeNetworkInterfaces", "ec2:DescribeTags", "ec2:GetCoipPoolUsage", "ec2:DescribeCoipPools", "elasticloadbalancing:DescribeLoadBalancers", "elasticloadbalancing:DescribeLoadBalancerAttributes", "elasticloadbalancing:DescribeListeners", "elasticloadbalancing:DescribeListenerCertificates", "elasticloadbalancing:DescribeSSLPolicies", "elasticloadbalancing:DescribeRules", "elasticloadbalancing:DescribeTargetGroups", "elasticloadbalancing:DescribeTargetGroupAttributes", "elasticloadbalancing:DescribeTargetHealth", "elasticloadbalancing:DescribeTags"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["cognito-idp:DescribeUserPoolClient", "acm:ListCertificates", "acm:DescribeCertificate", "iam:ListServerCertificates", "iam:GetServerCertificate", "waf-regional:GetWebACL", "waf-regional:GetWebACLForResource", "waf-regional:AssociateWebACL", "waf-regional:DisassociateWebACL", "wafv2:GetWebACL", "wafv2:GetWebACLForResource", "wafv2:AssociateWebACL", "wafv2:DisassociateWebACL", "shield:GetSubscriptionState", "shield:DescribeProtection", "shield:CreateProtection", "shield:DeleteProtection"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["ec2:AuthorizeSecurityGroupIngress", "ec2:RevokeSecurityGroupIngress"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["ec2:CreateSecurityGroup"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["ec2:CreateTags"],
+			"resources": ["arn:aws:ec2:*:*:security-group/*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["ec2:CreateTags", "ec2:DeleteTags"],
+			"resources": ["arn:aws:ec2:*:*:security-group/*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["ec2:AuthorizeSecurityGroupIngress", "ec2:RevokeSecurityGroupIngress", "ec2:DeleteSecurityGroup"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["elasticloadbalancing:CreateLoadBalancer", "elasticloadbalancing:CreateTargetGroup"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["elasticloadbalancing:CreateListener", "elasticloadbalancing:DeleteListener", "elasticloadbalancing:CreateRule", "elasticloadbalancing:DeleteRule"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["elasticloadbalancing:AddTags", "elasticloadbalancing:RemoveTags"],
+			"resources": ["arn:aws:elasticloadbalancing:*:*:targetgroup/*/*", "arn:aws:elasticloadbalancing:*:*:loadbalancer/net/*/*", "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/*/*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["elasticloadbalancing:AddTags", "elasticloadbalancing:RemoveTags"],
+			"resources": ["arn:aws:elasticloadbalancing:*:*:listener/net/*/*/*", "arn:aws:elasticloadbalancing:*:*:listener/app/*/*/*", "arn:aws:elasticloadbalancing:*:*:listener-rule/net/*/*/*", "arn:aws:elasticloadbalancing:*:*:listener-rule/app/*/*/*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["elasticloadbalancing:ModifyLoadBalancerAttributes", "elasticloadbalancing:SetIpAddressType", "elasticloadbalancing:SetSecurityGroups", "elasticloadbalancing:SetSubnets", "elasticloadbalancing:DeleteLoadBalancer", "elasticloadbalancing:ModifyTargetGroup", "elasticloadbalancing:ModifyTargetGroupAttributes", "elasticloadbalancing:DeleteTargetGroup"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["elasticloadbalancing:RegisterTargets", "elasticloadbalancing:DeregisterTargets"],
+			"resources": ["arn:aws:elasticloadbalancing:*:*:targetgroup/*/*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["elasticloadbalancing:SetWebAcl", "elasticloadbalancing:ModifyListener", "elasticloadbalancing:AddListenerCertificates", "elasticloadbalancing:RemoveListenerCertificates", "elasticloadbalancing:ModifyRule"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}]
+	}]
+}, {
+	"serviceAccount": "adot-collector",
+	"role": "EKS-Fargate-ADOT-ServiceAccount-Role",
+	"namespace": "monitoring",
+	"policies": [{
+		"name": "CloudWatchAgentServerPolicy",
+		"arn": "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
+		"statements": [{
+			"actions": ["cloudwatch:PutMetricData", "ec2:DescribeVolumes", "ec2:DescribeTags", "logs:PutLogEvents", "logs:DescribeLogStreams", "logs:DescribeLogGroups", "logs:CreateLogStream", "logs:CreateLogGroup"],
+			"resources": ["*"],
+			"effect": "Allow"
+		}, {
+			"actions": ["ssm:GetParameter"],
+			"resources": ["arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"],
+			"effect": "Allow"
+		}]
+	}]
+}]

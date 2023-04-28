@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: IRSA_ROLE_ARN
+  name: irsa-auditor-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: irsa-auditor-role
+rules:
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: irsa-auditor-role-binding
+subjects:
+- kind: ServiceAccount
+  name: irsa-auditor-sa
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: irsa-auditor-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: irsa-auditor
+spec:
+  template:
+    spec:
+      containers:
+      - name: irsa-auditor
+        image: public.ecr.aws/y8k3f8w6/irsa-auditor:latest
+        command: ["java",  "-jar", "/app.jar"]
+        args: ["BUCKET_NAME"]
+      restartPolicy: Never
+      serviceAccountName: irsa-auditor-sa
+  backoffLimit: 2
